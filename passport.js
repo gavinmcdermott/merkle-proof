@@ -19,6 +19,7 @@ const hashVals = (dataA, dataB) => {
   return crypto.createHmac('sha256', 'secret').update(dataA.toString()).update(dataB.toString()).digest('hex')
 }
 
+let rawData = null
 let parsedData = null
 let merkleBase = null
 let merkleTree = null
@@ -27,10 +28,9 @@ let initialized = false
 // parse an object of data - very naive for POC
 let parseObject = (data) => {
   let handleAtomicData = (data, key) => {
-    let children = null
     let strVal = data.toString()
     let hash = hashVals(strVal)
-    let result = { children, hash, data }
+    let result = { hash, data }
     return result
   }
 
@@ -94,11 +94,16 @@ let buildTree = (data) => {
   return result
 }
 
+// Validate an attribute against the existing
+let validateAttribute = (attributes) => {
+
+}
+
 // Build a sharable package
 let buildPackage = (attributes, merkleTree, personalData) => {
   let result = {
     attributes: {},
-    tree: merkleTree
+    merkleTree
   }
   let treeBase = _.flatten(merkleTree[merkleTree.length - 1])
 
@@ -125,6 +130,8 @@ let buildPackage = (attributes, merkleTree, personalData) => {
 module.exports = {
 
   init: (data = defaultData) => {
+    rawData = data
+
     try {
       parsedData = parseObject(data)
       merkleBase = transformParsedObject(parsedData)
@@ -135,25 +142,19 @@ module.exports = {
     initialized = true
 
     return {
-      data: parsedData,
+      attributes: parsedData,
+      raw: rawData,
       merkleTree
     }
   },
 
-  api: {
-    build: (attributes = defaultAttributes) => {
-      if (!initialized) {
-        throw new Error('you must init the passport object!')
-      }
-      if (!_.isArray(attributes)) {
-        throw new Error('expected an array')
-      }
-      return buildPackage(attributes, merkleTree, parsedData)
-    },
-
-    validate: (attribute) => {
-      console.log('validating:', attribute)
+  build: (attributes = defaultAttributes) => {
+    if (!initialized) {
+      throw new Error('you must init the passport object!')
     }
+    if (!_.isArray(attributes)) {
+      throw new Error('expected an array')
+    }
+    return buildPackage(attributes, merkleTree, parsedData)
   }
-
 }

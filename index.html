@@ -2,9 +2,97 @@
 <head>
   <meta charset="UTF-8">
   <title>Passport</title>
-  <script type="text/javascript" src="bundle.js"></script>
+  <link rel="stylesheet" href="bootstrap.min.css"></link>
 </head>
 <body>
-  <h1>FOO</h1>
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-md-12">
+        <h1>Passport: Proof of Concept</h1>
+        <div class="row">
+          <p class="lead col-md-6">Note: This is G's quick and dirty concept for the Passport shared data package <mark>as I understood it</mark> based on a quick conversation with Dan on the morning of 7/14/2016</p>
+        </div>
+        <br>
+        <hr>
+        <br>
+      </div>
+
+      <div class="col-md-12">
+        <h2>Internals: The POC Guts</h2>
+      </div>
+
+      <div class="col-md-6">
+        <h3>Base Data Example</h3>
+        <pre id="preload-data" class="pre-scrollable"></pre>
+
+        <br>
+        <h3>Internal SHA'd Representation</h3>
+        <pre id="parsed-data" class="pre-scrollable"></pre>
+      </div>
+
+      <div class="col-md-12">
+        <br>
+        <br>
+        <hr>
+        <br>
+      </div>
+
+      <div class="col-md-12">
+        <h2>Demo: Provable, Shared Data</h2>
+      </div>
+
+      <div class="col-md-6">
+        <h3>Shared Passport Object</h3>
+        <br>
+        <h4>Merkle Tree</h4>
+        <pre id="merkle-tree" class="pre-scrollable"></pre>
+        <br>
+        <h4>Shared Data</h4>
+        <pre id="shared-data" class="pre-scrollable"></pre>
+      </div>
+
+      <div class="col-md-12">
+        <br>
+        <br>
+        <hr>
+        <br>
+      </div>
+
+      <div class="col-md-12">
+        <h2>Let's Get Crazy: Build Your Own Shared Data Package</h2>
+      </div>
+
+      <div class="col-md-6">
+        <p class="lead">Initialize a new shared data package using any of the attributes from the <code>base data example</code> above</p>
+        <br>
+        <div class="hidden" id="warning">
+          <div class="col-md-12 bg-danger">
+            <h4>Invalid attribute!</h4>
+          </div>
+          <div class="col-md-12"><br></div>
+        </div>
+        <form>
+          <div class="form-group">
+            <input id="input" class="form-control" value="state, zip" />
+          </div>
+          <br>
+          <button id="verify" type="submit" class="btn btn-info">Init a Custom Shared Package</button>
+        </form>
+      </div>
+
+      <div class="col-md-12">
+        <br>
+        <br>
+        <hr>
+        <br>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Load scripts -->
+  <script type="text/javascript" src="bundle.js"></script>
 </body>
 </html>
