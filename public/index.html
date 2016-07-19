@@ -10,9 +10,9 @@
     <div class="row">
 
       <div class="col-md-12">
-        <h1>Shared Data Bundle: Proof of Concept</h1>
+        <h1>Shared Data PoC</h1>
         <div class="row">
-          <p class="lead col-md-6">Note: This is a quick and dirty concept for the shared data bundle <mark>(as I understood it)</mark> based on a quick conversation with Dan (on the morning of 7/14/2016)</p>
+          <p class="lead col-md-8">This is a quick and dirty proof of concept for the shared data bundle</p>
         </div>
         <br>
         <hr>
@@ -20,16 +20,28 @@
       </div>
 
       <div class="col-md-12">
-        <h2>Internals: The POC Guts</h2>
+        <h2>Sign Customer Data</h2>
       </div>
 
-      <div class="col-md-6">
-        <h3>Base Data Example</h3>
+      <div class="col-md-8">
+        <h3>The Customer's Data</h3>
         <pre id="preload-data" class="pre-scrollable"></pre>
+        <button class="btn btn-primary" id="sign">Sign Customer Data</button>
 
         <br>
-        <h3>Internal SHA'd Representation</h3>
-        <pre id="parsed-data" class="pre-scrollable"></pre>
+        <!-- nested to show once signed -->
+        <div class="row hidden" id="signed-data">
+          <div class="col-md-12">
+            <h3>Customer Data Merkle Tree</h3>
+            <pre id="merkle-tree"></pre>
+
+            <h3>Customer Data Merkle Root</h3>
+            <pre id="merkle-root"></pre>
+
+            <h3>Signed Root</h3>
+            <pre id="signature"></pre>
+          </div>
+        </div>
       </div>
 
       <div class="col-md-12">
@@ -40,16 +52,11 @@
       </div>
 
       <div class="col-md-12">
-        <h2>Demo: Provable, Shared Data</h2>
+        <h2>Share Customer Data</h2>
       </div>
 
-      <div class="col-md-6">
-        <h3>The Publibly Shared Object</h3>
-        <br>
-        <h4>Merkle Tree</h4>
-        <pre id="merkle-tree" class="pre-scrollable"></pre>
-        <br>
-        <h4>Shared Data</h4>
+      <div class="col-md-8">
+        <h3>User Chooses to Share...</h3>
         <pre id="shared-data" class="pre-scrollable"></pre>
       </div>
 
@@ -61,25 +68,19 @@
       </div>
 
       <div class="col-md-12">
-        <h2>Let's Get Nuts: Build Your Own Publicly Shareable Data Bundle</h2>
+        <h2>Verify Shared Data</h2>
       </div>
 
-      <div class="col-md-6">
-        <p class="lead">Initialize a new shared data bundle using any of the attributes from the <code>base data example</code> above</p>
+      <div class="col-md-8">
+        <button class="btn btn-primary" id="verify">Verify Shared Data</button>
         <br>
-        <div class="hidden" id="warning">
-          <div class="col-md-12 bg-danger">
-            <h4>Invalid attribute!</h4>
+        <!-- nested to show once signed -->
+        <div class="row hidden" id="verified-data">
+          <div class="col-md-12">
+            <h3>Verified Data</h3>
+            <pre id="verification-data"></pre>
           </div>
-          <div class="col-md-12"><br></div>
         </div>
-        <form>
-          <div class="form-group">
-            <input id="input" class="form-control" value="state, zip" />
-          </div>
-          <br>
-          <button id="verify" type="submit" class="btn btn-info">Create New Shared Data Bundle</button>
-        </form>
       </div>
 
       <div class="col-md-12">

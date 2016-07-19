@@ -3,6 +3,9 @@
 import crypto from 'crypto'
 import _ from 'lodash'
 import r from 'ramda'
+// WARNING FOR LATER: I removed the call to .json in this package to use it in the browser
+import elliptic from 'elliptic'
+// WARNING FOR LATER: I removed the call to .json in this package to use it in the browser
 import defaultData from './data'
 
 // make sure we have personal data
@@ -19,11 +22,27 @@ const hashVals = (dataA, dataB) => {
   return crypto.createHmac('sha256', 'secret').update(dataA.toString()).update(dataB.toString()).digest('hex')
 }
 
+let initialized = false
+
 let rawData = null
 let parsedData = null
+
 let merkleBase = null
+let merkleRoot = null
 let merkleTree = null
-let initialized = false
+
+let keys = null
+let signedRoot = null
+
+
+const initKeys = () => {
+  // Create and initialize EC context (better do it once and reuse it)
+  if (keys) {
+    return keys
+  }
+  let ec = new elliptic.ec('secp256k1')
+  return ec.genKeyPair()
+}
 
 // parse an object of data - very naive for POC
 let parseObject = (data) => {
@@ -94,10 +113,6 @@ let buildTree = (data) => {
   return result
 }
 
-// Validate an attribute against the existing
-let validateAttribute = (attributes) => {
-
-}
 
 // Build a sharable package
 let buildPackage = (attributes, merkleTree, personalData) => {
@@ -119,12 +134,13 @@ let buildPackage = (attributes, merkleTree, personalData) => {
     result.attributes[attr] = {
       data: data.data,
       hash: data.hash,
-      verified: true
+      // valid: true
     }
   })
 
   return result
 }
+
 
 // API for the passport module
 module.exports = {
@@ -136,6 +152,9 @@ module.exports = {
       parsedData = parseObject(data)
       merkleBase = transformParsedObject(parsedData)
       merkleTree = buildTree(merkleBase)
+      merkleRoot = _.first(_.first(merkleTree))
+      // obviously this leaves the priv key hanging out
+      keys = initKeys()
     } catch (err) {
       throw err
     }
@@ -148,6 +167,14 @@ module.exports = {
     }
   },
 
+  sign: (data) => {
+    return keys.sign(data)
+  },
+
+  verify: (data, signature) => {
+    return keys.verify(data, signature)
+  },
+
   build: (attributes = defaultAttributes) => {
     if (!initialized) {
       throw new Error('you must init the passport object!')
@@ -158,3 +185,11 @@ module.exports = {
     return buildPackage(attributes, merkleTree, parsedData)
   }
 }
+
+
+
+
+// module.exports.init()
+// let sig = module.exports.sign('ssdfd')
+// console.log(sig)
+// console.log(module.exports.verify('ssdfd', sig))
